@@ -4,8 +4,9 @@ const schema = require("./schema/schema");
 const mongoose = require('mongoose');
 
 const app = express();
+require('dotenv').config()
 
-mongoose.connect("mongodb://azusaaz:cabinet777@ds047325.mlab.com:47325/cabinet");
+mongoose.connect(process.env.DB_HOST);
 mongoose.connection.once('open', ()=>{
   console.log("connected to database");
 });
