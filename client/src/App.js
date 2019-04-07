@@ -3,20 +3,21 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
 import ContentList from './Components/ContentList.js';
+import AddContent from './Components/AddContent.js';
 
 const client = new ApolloClient({
-  uri:'http://localhost:8080/graphql'
+  uri:'http://localhost:3000/graphql'
 })
 
 
 class App extends Component {
   render() {
     return (
-
       <ApolloProvider client={client}>
         <div className="App">
         <h1>cabiNet</h1>
         <ContentList />
+        <AddContent />
         </div>
       </ApolloProvider>
     );

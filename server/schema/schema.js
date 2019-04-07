@@ -238,8 +238,10 @@ const RootQuery = new GraphQLObjectType({
     },
     reviews: {
       type: new GraphQLList(ReviewType),
+      args:{contentId:{type: GraphQLID}},
       resolve(parent,args){
-      return Review.find({});
+        console.log("areareae",args.contentId)
+      return Review.find({contentId: args.contentId});
       }
     },
     likes: {
