@@ -18,9 +18,16 @@ class ReviewList extends Component {
     }else{
       return(
         <div>
+          
          {reviews.map(item=>{
-           return<li key={item.id}>{item.comment}</li>
+           return(
+            <div>
+              {item.rate}
+              <li key={item.id}>{item.comment}</li>
+            </div>
+           )
          })}
+         
         </div>
       )
     }

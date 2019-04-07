@@ -1,18 +1,4 @@
 import {gql} from 'apollo-boost';
-
-
-const getContentQuery = gql`
-  {
-    contents{
-      id
-      title
-      desc
-      url
-    }
-  }
-`
-
-
 const getUsersQuery = gql`
   {
     users{
@@ -22,6 +8,44 @@ const getUsersQuery = gql`
     }
   }
 `
+
+const getBoardsQuery = gql`
+  {
+    boards{
+      id
+      title
+    }
+  }
+`
+
+const getContentsQuery = gql`
+ query($boardId: ID){
+    contents(boardId: $boardId){
+      id
+      title
+      desc
+      url
+      user{
+        id
+        username
+        email
+      }
+    }
+  }
+`
+
+
+
+
+const getCategoriesQuery = gql`
+  {
+    categories{
+      id
+      title
+    }
+  }
+`
+
 const addContentMutation = gql`
  mutation($title: String, $desc: String, $url: String!,$imageUrl: String, $userId: ID!, $boardId: ID!, $categoryId: ID!){
     addContent(title:$title, desc:$desc,url:$url, imageUrl:$imageUrl, userId:$userId, boardId:$boardId, categoryId:$categoryId){
@@ -29,6 +53,7 @@ const addContentMutation = gql`
       desc
       url
       imageUrl
+      user
     }
  }
 `
@@ -38,10 +63,11 @@ const getReviewsQuery = gql`
       id
       rate
       comment
+
     }
   }
 `
 
-export {getContentQuery, getUsersQuery,addContentMutation, getReviewsQuery};
+export {getUsersQuery, getBoardsQuery, getContentsQuery, getCategoriesQuery, addContentMutation, getReviewsQuery};
 
 

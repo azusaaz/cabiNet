@@ -32,7 +32,7 @@ const UserType = new GraphQLObjectType({
       resolve(parent,args){
         // return lodash.filter(boards,{ userId: parent.id})
         return Board.find({userId: parent.id})
-      }
+      },
     }
   })
 });
@@ -49,7 +49,8 @@ const BoardType = new GraphQLObjectType({
         //  return lodash.find(users,{id: parent.userId});
         return User.findById(parent.userId);
        }
-    }
+    },
+
   })
 });
 
@@ -57,7 +58,7 @@ const CategoryType = new GraphQLObjectType({
   name:"Category",
   fields:()=>({
     id: {type: GraphQLID},
-    name: {type: GraphQLString},
+    title: {type: GraphQLString},
     board: {
        type: BoardType,
        resolve(parent,args){
@@ -82,6 +83,12 @@ const ContentType = new GraphQLObjectType({
         //  return lodash.find(users,{id: parent.userId});
         return User.findById(parent.userId);
        }
+    },
+    board: {
+      type: BoardType,
+      resolve(parent,args){
+       return Board.findById(parent.boardId);
+      }
     }
   })
 });
@@ -101,7 +108,7 @@ const ReviewType = new GraphQLObjectType({
     content: {
       type: ContentType,
       resolve(parent,args){
-       return User.findById(parent.contentId);
+       return Content.findById(parent.contentId);
       }
    }
   })
@@ -232,15 +239,15 @@ const RootQuery = new GraphQLObjectType({
     },
     contents: {
       type: new GraphQLList(ContentType),
+      args:{boardId:{type: GraphQLID}},
       resolve(parent,args){
-      return Content.find({});
+      return Content.find({boardId: args.boardId});
       }
     },
     reviews: {
       type: new GraphQLList(ReviewType),
       args:{contentId:{type: GraphQLID}},
       resolve(parent,args){
-        console.log("areareae",args.contentId)
       return Review.find({contentId: args.contentId});
       }
     },
@@ -295,12 +302,12 @@ const Mutation = new GraphQLObjectType({
     addCategory: {
       type: CategoryType,
       args: {
-        name: {type: new GraphQLNonNull(GraphQLString)},
+        title: {type: new GraphQLNonNull(GraphQLString)},
         boardId: {type: new GraphQLNonNull(GraphQLID)}
       },
       resolve(parent, args){
         let category = new Category({
-          name: args.name,
+          title: args.title,
           boardId: args.boardId
         });
         return category.save();

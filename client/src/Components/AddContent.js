@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {graphql, compose} from 'react-apollo';
-import {getUsersQuery, addContentMutation, getContentQuery} from '../Queries/queries.js'
+import {getUsersQuery, addContentMutation, getContentsQuery, getCategoriesQuery} from '../Queries/queries.js'
 
 
 
@@ -14,7 +14,8 @@ class AddContent extends Component {
        url:'',
        userId:'',
        boardId:"5ca7ecb8b31d4f4761869352",
-       categoryId:"5ca803f54d559c51ed009b23"
+       categoryId:"5ca803f54d559c51ed009b23",
+       category:{}
     };
   }
 
@@ -30,6 +31,23 @@ class AddContent extends Component {
     }
   }
 
+  displayCategories(){
+    var data = this.props.getCategoriesQuery;
+   
+    if(data.loading){
+      return <option disabled>Loading Categories...</option>
+    }else{
+      if(!data||data===[]){
+        return null;
+        }else{
+        return data.categories.map(category =>{
+          let on = category.id === this.state.categoryId;
+          return <option key={category.id} value={category.id} selected={on}>{category.title}</option>
+        })
+      }
+    }
+  }
+
   submitForm(e){
     e.preventDefault();
     this.props.addContentMutation({
@@ -41,7 +59,7 @@ class AddContent extends Component {
         boardId: this.state.boardId,
         categoryId: this.state.categoryId,
       },
-      refetchQueries: [{query: getContentQuery}]
+      refetchQueries: [{query: getContentsQuery}]
     });
   }
 
@@ -74,6 +92,15 @@ class AddContent extends Component {
            </select>
         </div>
 
+        <div className="field">
+          <label>Category:</label>
+           <select onChange={(e)=>this.setState({category: e.target.value})}>
+             <option>Select category</option>
+             <option>Add a new category</option>
+             {this.displayCategories()}
+           </select>
+        </div>
+
         <button>+</button>
 
       </form>
@@ -83,5 +110,6 @@ class AddContent extends Component {
 
 export default compose(
   graphql(getUsersQuery,{name:"getUsersQuery"}),
+  graphql(getCategoriesQuery,{name:"getCategoriesQuery"}),
   graphql(addContentMutation,{name:"addContentMutation"}),
 )(AddContent);

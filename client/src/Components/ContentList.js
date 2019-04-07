@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {graphql} from 'react-apollo';
-import {getContentQuery} from '../Queries/queries.js';
+import {getContentsQuery} from '../Queries/queries.js';
 import ReviewList from './ReviewList.js'
 
 class ContentList extends Component {
@@ -11,14 +11,26 @@ class ContentList extends Component {
        selected: null
      }
   }
+  
   displayContents(){
     var data = this.props.data;
-    if(data.loading){
+    if(!data.contents||data.contents.length<1){
+      return(
+      <div>No board yet</div>
+      )
+    }else if(data.loading){
       return(<div>Loading contents...</div>)
     }else{
       return data.contents.map(content=>{
+        console.table(content)
         return(
-        <li key={content.id} onClick={(e)=>{this.setState({selected: content.id})}}>{content.title}</li>
+          <div>
+            <p>Posted by{content.user.username}</p>
+            <p>{content.user.userid}</p>
+            <li key={content.id} onClick={(e)=>{this.setState({selected: content.id})}} style={content.id===this.state.selected?{backgroundColor: "grey"}:null}>{content.title}</li>
+            <div>{content.desc}</div>
+            <div><a href={content.url}>{content.url}</a></div>
+          </div>
         )
       })
     }
@@ -37,4 +49,13 @@ class ContentList extends Component {
   }
 }
 
-export default graphql(getContentQuery)(ContentList);
+export default graphql(getContentsQuery,{
+  options: (props)=>{
+    console.log("dddmmm",props);
+    return{
+      variables: {
+        boardId: props.currentBoard.id
+      }
+    }
+  }
+})(ContentList);
