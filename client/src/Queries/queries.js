@@ -5,6 +5,47 @@ const getUsersQuery = gql`
       id
       username
       email
+      boards{
+        title
+        categories
+        {
+          title
+          contents
+          {
+            title
+            reviews{
+              rate
+              comment
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+const getUserQuery = gql`
+
+query($userId: ID){
+  user(userId: $userId){
+      id
+      username
+      email
+      boards{
+        title
+        categories
+        {
+          title
+          contents
+          {
+            title
+            reviews{
+              rate
+              comment
+            }
+          }
+        }
+      }
     }
   }
 `
@@ -38,8 +79,8 @@ const getContentsQuery = gql`
 
 
 const getCategoriesQuery = gql`
-  {
-    categories{
+query($boardId: ID){
+  categories(boardId: $boardId){
       id
       title
     }
@@ -68,6 +109,6 @@ const getReviewsQuery = gql`
   }
 `
 
-export {getUsersQuery, getBoardsQuery, getContentsQuery, getCategoriesQuery, addContentMutation, getReviewsQuery};
+export {getUsersQuery,getUserQuery, getBoardsQuery, getContentsQuery, getCategoriesQuery, addContentMutation, getReviewsQuery};
 
 

@@ -50,7 +50,13 @@ const BoardType = new GraphQLObjectType({
         return User.findById(parent.userId);
        }
     },
-
+    categories: {
+      type: new GraphQLList(CategoryType),
+      resolve(parent,args){
+        // return lodash.filter(boards,{ userId: parent.id})
+        return Category.find({boardId: parent.id})
+      },
+    }
   })
 });
 
@@ -64,6 +70,13 @@ const CategoryType = new GraphQLObjectType({
        resolve(parent,args){
         return Board.findById(parent.boardId);
        }
+    },
+    contents: {
+      type: new GraphQLList(ContentType),
+      resolve(parent,args){
+        // return lodash.filter(boards,{ userId: parent.id})
+        return Content.find({categoryId: parent.id})
+      },
     }
   })
 });
@@ -89,7 +102,15 @@ const ContentType = new GraphQLObjectType({
       resolve(parent,args){
        return Board.findById(parent.boardId);
       }
+    },
+    reviews: {
+      type: new GraphQLList(ReviewType),
+      resolve(parent,args){
+        // return lodash.filter(boards,{ userId: parent.id})
+        return Review.find({contentId: parent.id})
+      },
     }
+
   })
 });
 
@@ -233,8 +254,9 @@ const RootQuery = new GraphQLObjectType({
     },
     categories: {
       type: new GraphQLList(CategoryType),
+      args:{boardId:{type: GraphQLID}},
       resolve(parent,args){
-    return Category.find({});
+      return Category.find({boardId: args.boardId});
       }
     },
     contents: {

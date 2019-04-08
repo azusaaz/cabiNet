@@ -21,7 +21,7 @@ class AddContent extends Component {
 
   displayUsers(){
     var data = this.props.getUsersQuery;
-   
+    console.log("aaaa",data.users);
     if(data.loading){
       return <option disabled>Loading Users...</option>
     }else{
@@ -31,22 +31,22 @@ class AddContent extends Component {
     }
   }
 
-  displayCategories(){
-    var data = this.props.getCategoriesQuery;
+  // displayCategories(){
+  //   var data = this.props.getCategoriesQuery;
    
-    if(data.loading){
-      return <option disabled>Loading Categories...</option>
-    }else{
-      if(!data||data===[]){
-        return null;
-        }else{
-        return data.categories.map(category =>{
-          let on = category.id === this.state.categoryId;
-          return <option key={category.id} value={category.id} selected={on}>{category.title}</option>
-        })
-      }
-    }
-  }
+  //   if(data.loading){
+  //     return <option disabled>Loading Categories...</option>
+  //   }else{
+  //     if(!data||data===[]){
+  //       return null;
+  //       }else{
+  //       return data.categories.map(category =>{
+  //         let on = category.id === this.state.categoryId;
+  //         return <option key={category.id} value={category.id} selected={on}>{category.title}</option>
+  //       })
+  //     }
+  //   }
+  // }
 
   submitForm(e){
     e.preventDefault();
@@ -97,7 +97,7 @@ class AddContent extends Component {
            <select onChange={(e)=>this.setState({category: e.target.value})}>
              <option>Select category</option>
              <option>Add a new category</option>
-             {this.displayCategories()}
+             {/* {this.displayCategories()} */}
            </select>
         </div>
 
@@ -110,6 +110,6 @@ class AddContent extends Component {
 
 export default compose(
   graphql(getUsersQuery,{name:"getUsersQuery"}),
-  graphql(getCategoriesQuery,{name:"getCategoriesQuery"}),
+  // graphql(getCategoriesQuery,{name:"getCategoriesQuery"}),
   graphql(addContentMutation,{name:"addContentMutation"}),
 )(AddContent);

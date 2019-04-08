@@ -6,6 +6,8 @@ import BoardList from './Components/BoardList.js';
 import ContentList from './Components/ContentList.js';
 import AddContent from './Components/AddContent.js';
 
+
+
 const client = new ApolloClient({
   uri:'http://localhost:3000/graphql'
 })
@@ -58,7 +60,7 @@ class App extends Component {
         setBoard={(currentBoard)=>{this.setState({currentBoard})}}
         />
         <ContentList currentBoard={this.state.currentBoard} />
-        <AddContent />
+        <AddContent currentBoard={this.state.currentBoard}/>
         aaa{this.state.currentBoard.title}aaa
         </div>
       </ApolloProvider>
